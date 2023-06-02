@@ -1,0 +1,5 @@
+
+(executable
+  (name t1)
+  (libraries moonpool tiny_httpd yojson ;tiny-httpd-moonpool
+             ))
