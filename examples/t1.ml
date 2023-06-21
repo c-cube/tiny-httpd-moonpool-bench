@@ -27,7 +27,9 @@ let handle_name_json (server : H.t) : unit =
 
 let run () : int =
   let pool = Pool.create ~min:!j ~per_domain:!min_per_dom () in
-  let server = H.create ~port:!port ~new_thread:(Pool.run pool) () in
+  let server =
+    H.create ~max_connections:2048 ~port:!port ~new_thread:(Pool.run pool) ()
+  in
 
   handle_name server;
   handle_name_json server;
