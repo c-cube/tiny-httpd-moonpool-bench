@@ -41,6 +41,9 @@ let run () : int =
     1
 
 let () =
+  (* force linking *)
+  ignore (Jemalloc.version ());
+
   Printexc.record_backtrace true;
   Arg.parse
     [
