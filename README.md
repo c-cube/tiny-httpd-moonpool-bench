@@ -4,8 +4,8 @@ Benchmark for tiny_httpd + moonpool.
 Use:
 
 ```sh
-$ make opam-install-deps
-
+$ git submodule update --init
+$ make install-opam-deps
 $ ./run.sh
 ```
 
