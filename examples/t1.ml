@@ -2,7 +2,7 @@ open Moonpool
 module H = Tiny_httpd
 
 let j = ref 20
-let min_per_dom = ref 2
+let min_per_dom = ref 0
 let port = ref 8084
 
 let handle_name (server : H.t) : unit =
@@ -26,16 +26,21 @@ let handle_name_json (server : H.t) : unit =
   H.Response.make_string @@ Ok (Yojson.Safe.to_string j)
 
 let run () : int =
-  let pool = Pool.create ~min:!j ~per_domain:!min_per_dom () in
+  let num_threads =
+    max (!min_per_dom * Moonpool.recommended_thread_count ()) !j
+  in
+  (* TODO: option to pick ws pool *)
+  let pool = Ws_pool.create ~num_threads () in
   let server =
-    H.create ~max_connections:2048 ~port:!port ~new_thread:(Pool.run pool) ()
+    H.create ~max_connections:2048 ~port:!port
+      ~new_thread:(Runner.run_async pool) ()
   in
 
   handle_name server;
   handle_name_json server;
 
   Printf.printf "listening on http://127.0.0.1:%d (%d threads)\n%!" !port
-    (Pool.size pool);
+    (Runner.size pool);
   match H.run server with
   | Ok () -> 0
   | Error e ->
