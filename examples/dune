@@ -1,6 +1,9 @@
-
 (executable
-  (name t1)
-  (libraries moonpool tiny_httpd yojson jemalloc
-             ;tiny-httpd-moonpool
-             ))
+ (name t1)
+ (libraries
+  moonpool
+  tiny_httpd
+  yojson
+  jemalloc
+  ;tiny-httpd-moonpool
+  ))
