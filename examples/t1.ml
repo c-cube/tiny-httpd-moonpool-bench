@@ -1,8 +1,7 @@
 module M = Moonpool
 module H = Tiny_httpd
 
-let j = ref 20
-let min_per_dom = ref 2
+let j = ref (M.recommended_thread_count ())
 let port = ref 8084
 
 let handle_name (server : H.t) : unit =
@@ -51,9 +50,6 @@ let () =
   Arg.parse
     [
       "-j", Arg.Set_int j, " size of pool";
-      ( "--min-per-dom",
-        Arg.Set_int min_per_dom,
-        " minimum number of threads per domain" );
       "-p", Arg.Set_int port, " port to listen on";
     ]
     ignore "t1 [opt]*";
